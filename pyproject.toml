@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "hermes-assetrizz"
 version = "0.1.0"
-description = "Assetrizz Hermes plugin: search a local 2D game-asset library and compose scenes."
+description = "Assetrizz Hermes plugin: search a 2D game-asset catalog and compose scenes."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
@@ -25,11 +25,12 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/mojomast/assetrizz"
+Homepage = "https://github.com/mojomast/assetrizz-hermes"
 
 [tool.setuptools.packages.find]
 include = ["assetrizz_plugin*"]
 exclude = ["tests*", "docs*", "evals*"]
 
 [tool.pytest.ini_options]
-testpaths = ["../tests"]
+pythonpath = ["."]
+testpaths = ["tests"]

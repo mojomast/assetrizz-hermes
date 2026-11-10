@@ -348,7 +348,7 @@ def _seed_library_root(dest: Path) -> None:
             raise LibraryError(
                 "SHA-256 of the bundled catalog snapshot did not match the pin.",
                 code="hash_mismatch",
-                fix="Reinstall the plugin so plugin/db/assets.db.xz is the pinned snapshot.",
+                fix="Reinstall the plugin so db/assets.db.xz is the pinned snapshot.",
             )
         tmp = target.with_name(target.name + ".partial")
         tmp.write_bytes(data)

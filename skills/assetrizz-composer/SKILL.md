@@ -71,7 +71,7 @@ wants to watch the compose or install assets locally. Tools still work when
 the pane is closed.
 
 If search fails because the bundled catalog is missing, ask the user to
-reinstall `plugin/`. If a place or render fails with `offline`, ask them to
+reinstall `mojomast/assetrizz-hermes`. If a place or render fails with `offline`, ask them to
 switch `asset_mode` to `on_demand` or `local`, or to install a local library
 from the pane / CLI. An optional **Library path** (`ASSETRIZZ_LIBRARY`) still
 points at a complete checkout when they already have one.
@@ -80,7 +80,7 @@ points at a complete checkout when they already have one.
 
 | code | What to do |
 |---|---|
-| `library_missing` | The bundled catalog is missing, or a complete local library was required. Ask the user to reinstall `plugin/`, leave `asset_mode` at `on_demand`, or download a local library from the pane. |
+| `library_missing` | The bundled catalog is missing, or a complete local library was required. Ask the user to reinstall `mojomast/assetrizz-hermes`, leave `asset_mode` at `on_demand`, or download a local library from the pane. |
 | `offline` | `asset_mode` is offline (or `ASSETRIZZ_OFFLINE` is set). Use a file already on disk, or ask the user to change mode. |
 | `hash_mismatch` | A downloaded or cached file did not match the catalog SHA-256 and was not kept. Retry, or ask the user to re-download. |
 | `fetch_failed` | The on-demand fetch failed. Retry, or ask the user to install a local library. |

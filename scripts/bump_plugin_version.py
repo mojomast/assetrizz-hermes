@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Rewrite only the version: line in plugin/plugin.yaml (and pyproject). Refuses duplicate keys."""
+"""Rewrite only the version: line in plugin.yaml (and pyproject). Refuses duplicate keys."""
 from __future__ import annotations
 
 import argparse

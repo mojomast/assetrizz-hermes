@@ -216,7 +216,7 @@ def restore_catalog_xz(xz: Path, dest: Path, expected_sha256: str) -> Path:
         raise LibraryError(
             f"No catalog snapshot at {xz}.",
             code="library_missing",
-            fix="Reinstall the plugin so plugin/db/assets.db.xz is present, or set a local library.",
+            fix="Reinstall the plugin so db/assets.db.xz is present, or set a local library.",
         )
     verify_file_sha256(xz, expected_sha256, label="bundled catalog snapshot")
     dest.parent.mkdir(parents=True, exist_ok=True)
