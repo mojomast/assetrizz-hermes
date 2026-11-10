@@ -1,0 +1,272 @@
+{
+  "id": "heliox-yard",
+  "template": "topdown_shooter",
+  "style": "dark_scifi",
+  "title": "HELIOX YARD",
+  "genre": "sci-fi top-down shooter / strategy",
+  "background": "backgrounds/scene/star_field_wide",
+  "terrain": [
+    {
+      "id": "pad",
+      "tile": "tiles/floor/metal_plate_base",
+      "rect": [
+        0,
+        4,
+        30,
+        13
+      ]
+    },
+    {
+      "id": "pad_a",
+      "tile": "tiles/floor/metal_plate_variant_a",
+      "rect": [
+        4,
+        6,
+        6,
+        6
+      ]
+    },
+    {
+      "id": "pad_b",
+      "tile": "tiles/floor/metal_plate_variant_b",
+      "rect": [
+        18,
+        8,
+        6,
+        5
+      ]
+    },
+    {
+      "id": "clamp",
+      "tile": "tiles/floor/crystal_floor_base",
+      "rect": [
+        12,
+        6,
+        6,
+        5
+      ]
+    }
+  ],
+  "place": [
+    {
+      "id": "barge",
+      "slug": "vehicles/air/sky_barge_idle",
+      "at": [
+        18.0,
+        3.2
+      ],
+      "band": "sky"
+    },
+    {
+      "id": "crystal",
+      "slug": "props/object/crystal_formation_plain",
+      "at": [
+        14.5,
+        8.0
+      ]
+    },
+    {
+      "id": "lamp_l",
+      "slug": "props/object/lamp_post_lit",
+      "at": [
+        8.0,
+        6.6
+      ]
+    },
+    {
+      "id": "lamp_r",
+      "slug": "props/object/lamp_post_lit",
+      "at": [
+        20.0,
+        6.6
+      ]
+    },
+    {
+      "id": "crate_a",
+      "slug": "props/object/crate_plain",
+      "at": [
+        5.0,
+        9.0
+      ]
+    },
+    {
+      "id": "crate_b",
+      "slug": "props/object/crate_plain",
+      "at": [
+        5.9,
+        9.7
+      ]
+    },
+    {
+      "id": "barrel_l",
+      "slug": "props/object/barrel_plain",
+      "at": [
+        6.4,
+        10.4
+      ]
+    },
+    {
+      "id": "crate_r",
+      "slug": "props/object/crate_plain",
+      "at": [
+        22.0,
+        11.0
+      ]
+    },
+    {
+      "id": "barrel_r",
+      "slug": "props/object/barrel_plain",
+      "at": [
+        23.0,
+        11.6
+      ]
+    },
+    {
+      "id": "trolley",
+      "slug": "vehicles/land/hand_trolley_idle",
+      "at": [
+        4.8,
+        12.0
+      ]
+    },
+    {
+      "id": "chest",
+      "slug": "props/object/chest_closed",
+      "at": [
+        3.6,
+        11.2
+      ]
+    },
+    {
+      "id": "scratch",
+      "slug": "decals/wear/scratched_metal_plain",
+      "at": [
+        8.0,
+        10.0
+      ],
+      "band": "decal"
+    },
+    {
+      "id": "scuff",
+      "slug": "decals/wear/scuff_arc_plain",
+      "at": [
+        19.0,
+        12.0
+      ],
+      "band": "decal"
+    },
+    {
+      "id": "player",
+      "slug": "characters/humanoid/rogue_front",
+      "at": [
+        10.0,
+        11.2
+      ],
+      "role": "player"
+    },
+    {
+      "id": "ally",
+      "slug": "characters/humanoid/wanderer_three_quarter",
+      "at": [
+        7.0,
+        11.4
+      ]
+    },
+    {
+      "id": "tech",
+      "slug": "characters/humanoid/miner_side",
+      "at": [
+        19.5,
+        11.2
+      ]
+    },
+    {
+      "id": "drone_l",
+      "slug": "enemies/creature/scout_drone_idle_side",
+      "at": [
+        8.6,
+        8.0
+      ],
+      "flip_x": true
+    },
+    {
+      "id": "drone_c",
+      "slug": "enemies/creature/scout_drone_idle_front",
+      "at": [
+        15.6,
+        9.2
+      ]
+    },
+    {
+      "id": "drone_r",
+      "slug": "enemies/creature/scout_drone_idle_side",
+      "at": [
+        22.2,
+        9.6
+      ]
+    },
+    {
+      "id": "spark",
+      "slug": "vfx/effect/spark_burst_f3",
+      "at": [
+        15.6,
+        8.5
+      ],
+      "band": "aerial"
+    }
+  ],
+  "bars": [
+    {
+      "label": "HULL",
+      "fill": "health_fill_plain",
+      "frac": 0.78,
+      "value": "78%"
+    },
+    {
+      "label": "CELL",
+      "fill": "mana_fill_plain",
+      "frac": 0.68,
+      "value": "41/60"
+    },
+    {
+      "label": "AMMO",
+      "fill": "xp_fill_plain",
+      "frac": 0.2,
+      "value": "24/120"
+    }
+  ],
+  "currency_icon": "valuable/gold_coin",
+  "currency": "CR  6,450",
+  "meta_lines": [
+    "SECTOR 7-K  •  EVAC 00:47"
+  ],
+  "quest_title": "HOLD THE YARD",
+  "quest_lines": [
+    "Cover the east clamp until the barge clears the well",
+    "Do not let drones nest on the pad"
+  ],
+  "dialogue_speaker": "YARD ACTUAL  //  COMM",
+  "dialogue_text": "Barge is hot. Cover the east clamp. You have forty-seven seconds.",
+  "prompts": [
+    "R  Reload",
+    "Q  Command"
+  ],
+  "hotbar": [
+    "dark_scifi/icons/weapon/crystal_wand_plain",
+    "dark_scifi/icons/misc/round_bomb_plain",
+    "dark_scifi/icons/potion/health_potion_plain",
+    "dark_scifi/icons/potion/stamina_potion_plain",
+    "dark_scifi/icons/tool/coil_of_rope_plain",
+    "dark_scifi/icons/valuable/iron_key_plain",
+    "dark_scifi/icons/misc/raw_crystal_plain",
+    "dark_scifi/icons/tool/oil_lantern_plain"
+  ],
+  "hotbar_selected": 1,
+  "minimap": true,
+  "radar": true,
+  "panel_widget": "panel_dark",
+  "dialogue_widget": "dialogue_box_plain",
+  "budgets": {
+    "props": 9
+  }
+}

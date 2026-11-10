@@ -1,0 +1,344 @@
+{
+  "id": "ciderlatch",
+  "template": "topdown_farming",
+  "style": "pixel_32",
+  "title": "CIDERLATCH",
+  "genre": "cozy pixel farming sim",
+  "background": "#6db54a",
+  "slots": {
+    "path_mid": [
+      9.5,
+      8.0
+    ],
+    "talk": [
+      12.7,
+      8.1
+    ],
+    "house_door": [
+      13.8,
+      6.0
+    ]
+  },
+  "terrain": [
+    {
+      "id": "grass",
+      "tile": "tiles/floor/grass_base",
+      "rect": [
+        0,
+        0,
+        20,
+        12
+      ]
+    },
+    {
+      "id": "meadow",
+      "tile": "tiles/floor/flower_meadow_base",
+      "rect": [
+        0,
+        0,
+        20,
+        2
+      ]
+    },
+    {
+      "id": "path",
+      "tile": "tiles/floor/dirt_path_variant_a",
+      "rect": [
+        9,
+        3,
+        2,
+        9
+      ]
+    },
+    {
+      "id": "path_spur",
+      "tile": "tiles/floor/dirt_path_variant_b",
+      "rect": [
+        11,
+        4,
+        3,
+        1
+      ]
+    },
+    {
+      "id": "plot",
+      "tile": "tiles/floor/farm_soil_variant_a",
+      "rect": [
+        2,
+        5,
+        5,
+        3
+      ]
+    },
+    {
+      "id": "pond",
+      "tile": "tiles/floor/deep_water_base",
+      "rect": [
+        14,
+        7,
+        2,
+        2
+      ]
+    }
+  ],
+  "place": [
+    {
+      "id": "windmill",
+      "slug": "buildings/work/hill_windmill_exterior",
+      "at": [
+        3.0,
+        4.2
+      ]
+    },
+    {
+      "id": "inn",
+      "slug": "buildings/civic/roadside_inn_exterior",
+      "at": [
+        9.0,
+        4.0
+      ]
+    },
+    {
+      "id": "house",
+      "slug": "buildings/dwelling/stilt_house_exterior",
+      "at": [
+        14.0,
+        4.2
+      ]
+    },
+    {
+      "id": "beech",
+      "slug": "foliage/tree/copper_beech_plain",
+      "at": [
+        0.9,
+        3.6
+      ]
+    },
+    {
+      "id": "shrub_l",
+      "slug": "foliage/bush/flowering_shrub_plain",
+      "at": [
+        1.0,
+        7.0
+      ]
+    },
+    {
+      "id": "berry_l",
+      "slug": "foliage/bush/berry_thicket_plain",
+      "at": [
+        0.8,
+        8.5
+      ]
+    },
+    {
+      "id": "crop_a",
+      "slug": "props/object/mushroom_cluster_plain",
+      "at": [
+        3.0,
+        6.5
+      ]
+    },
+    {
+      "id": "crop_b",
+      "slug": "props/object/mushroom_cluster_plain",
+      "at": [
+        5.0,
+        6.2
+      ]
+    },
+    {
+      "id": "crop_c",
+      "slug": "props/object/mushroom_cluster_plain",
+      "at": [
+        4.0,
+        7.6
+      ]
+    },
+    {
+      "id": "scarecrow",
+      "slug": "props/object/scarecrow_plain",
+      "at": [
+        6.5,
+        5.3
+      ]
+    },
+    {
+      "id": "well",
+      "slug": "props/object/stone_well_plain",
+      "at": [
+        7.5,
+        7.5
+      ]
+    },
+    {
+      "id": "sign",
+      "slug": "props/object/signpost_blank",
+      "at": [
+        8.5,
+        4.8
+      ]
+    },
+    {
+      "id": "lamp",
+      "slug": "props/object/lamp_post_lit",
+      "at": [
+        10.5,
+        5.0
+      ]
+    },
+    {
+      "id": "cart",
+      "slug": "props/object/hand_cart_plain",
+      "at": [
+        11.4,
+        5.6
+      ]
+    },
+    {
+      "id": "barrel",
+      "slug": "props/object/barrel_plain",
+      "at": [
+        11.6,
+        6.2
+      ]
+    },
+    {
+      "id": "mailbox",
+      "slug": "props/object/mailbox_plain",
+      "at": [
+        14.6,
+        5.2
+      ]
+    },
+    {
+      "id": "crate",
+      "slug": "props/object/crate_plain",
+      "at": [
+        16.0,
+        5.8
+      ]
+    },
+    {
+      "id": "petals",
+      "slug": "decals/nature/petal_scatter_plain",
+      "at": [
+        3.5,
+        6.0
+      ],
+      "band": "decal"
+    },
+    {
+      "id": "player",
+      "slug": "characters/humanoid/farmer_front",
+      "slot": "path_mid",
+      "role": "player"
+    },
+    {
+      "id": "merchant",
+      "slug": "characters/humanoid/merchant_front",
+      "role": "npc",
+      "at": [
+        13.2,
+        8.0
+      ]
+    },
+    {
+      "id": "elder",
+      "slug": "characters/humanoid/village_elder_front",
+      "slot": "house_door",
+      "at": [
+        16.0,
+        5.3
+      ]
+    },
+    {
+      "id": "chicken_a",
+      "slug": "creatures/animal/backyard_chicken_idle_front",
+      "at": [
+        3.2,
+        8.4
+      ]
+    },
+    {
+      "id": "chicken_b",
+      "slug": "creatures/animal/backyard_chicken_idle_side",
+      "at": [
+        5.2,
+        8.6
+      ],
+      "flip_x": true
+    },
+    {
+      "id": "dog",
+      "slug": "creatures/animal/herding_dog_idle_front",
+      "at": [
+        7.6,
+        8.4
+      ]
+    },
+    {
+      "id": "duck",
+      "slug": "creatures/animal/farm_duck_idle_side",
+      "at": [
+        15.2,
+        8.6
+      ]
+    }
+  ],
+  "bars": [
+    {
+      "label": "NRG",
+      "fill": "health_fill_plain",
+      "frac": 0.72,
+      "value": "72/100"
+    },
+    {
+      "label": "STM",
+      "fill": "mana_fill_plain",
+      "frac": 0.54,
+      "value": "54/100"
+    },
+    {
+      "label": "XP",
+      "fill": "xp_fill_plain",
+      "frac": 0.38,
+      "value": "Lv 8"
+    }
+  ],
+  "currency_icon": "valuable/gold_coin",
+  "currency": "1,240",
+  "meta_lines": [
+    "Day 14  •  Ciderfall"
+  ],
+  "quest_title": "BRIAR NELL'S JAR",
+  "quest_lines": [
+    "Pick 8 trellis pears",
+    "Seal a jar in the still-shed",
+    "Return it to Nell before dusk"
+  ],
+  "dialogue_speaker": "TULLIN, HAWKER",
+  "dialogue_text": "Latch-apples came in early this week. I'll take the bruised ones — no haggling.",
+  "prompts": [
+    "E  Talk",
+    "Q  Journal"
+  ],
+  "hotbar": [
+    "pixel_32/icons/tool/shovel_plain",
+    "pixel_32/icons/tool/sickle_plain",
+    "pixel_32/icons/tool/hatchet_plain",
+    "pixel_32/icons/food/red_apple_plain",
+    "pixel_32/icons/food/carrot_plain",
+    "pixel_32/icons/food/berry_cluster_plain",
+    "pixel_32/icons/tool/fishing_rod_plain",
+    "pixel_32/icons/food/honey_jar_plain",
+    "pixel_32/icons/tool/oil_lantern_plain",
+    "pixel_32/icons/valuable/brass_key_plain"
+  ],
+  "hotbar_selected": 3,
+  "minimap": true,
+  "panel_widget": "panel_light",
+  "dialogue_widget": "dialogue_box_plain",
+  "budgets": {
+    "props": 11
+  }
+}
