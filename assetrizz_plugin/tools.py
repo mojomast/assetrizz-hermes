@@ -50,6 +50,7 @@ SCENE_OPS = (
     "render",
     "save",
     "load",
+    "compose",
 )
 
 
@@ -129,7 +130,8 @@ SCHEMA_SCENE = {
     "description": (
         "Compose a 2D scene from library assets only. Ops: create, place, move, "
         "scale, flip, layer (z-order), remove, tile (fill a rect), list, clear, "
-        "render (PNG under the export dir), save, load. Assets must come from "
+        "render (PNG under the export dir), save, load, compose (declarative "
+        "spec string). Assets must come from "
         "assetrizz_search — no arbitrary file paths. Missing PNGs are fetched "
         "on demand (pinned tag, SHA-256 verified) unless asset_mode is offline. "
         "render returns a filesystem path, not a full PNG. The Desktop pane "
@@ -168,6 +170,10 @@ SCHEMA_SCENE = {
             },
             "tile_w": {"type": "integer", "description": "For op=tile, width of the filled rectangle."},
             "tile_h": {"type": "integer", "description": "For op=tile, height of the filled rectangle."},
+            "spec": {
+                "type": "string",
+                "description": "For op=compose: JSON spec string (template, style, terrain, place, optional hud).",
+            },
         },
         "required": ["op"],
         "additionalProperties": False,
@@ -283,13 +289,104 @@ def handle_scene(args: dict[str, Any] | None = None) -> str:
             return _ok(save_scene(payload))
         if op == "load":
             return _ok(load_scene(payload))
+        if op == "compose":
+            return _compose_scene(payload)
         return err(
             Code.INVALID_OP,
             f"Unknown op {op!r}.",
-            "Use create, place, move, scale, flip, layer, remove, tile, list, clear, render, save, or load.",
+            "Use create, place, move, scale, flip, layer, remove, tile, list, clear, render, save, load, or compose.",
         )
     except Exception as exc:
         return _from_exc(exc)
+
+
+def _compose_scene(payload: dict[str, Any]) -> str:
+    from assetrizz_plugin.compose_v2.compile import compile_spec
+    from assetrizz_plugin.scene import compose, write_preview
+
+    raw = payload.get("spec")
+    if not isinstance(raw, str) or not raw.strip():
+        raise SceneError(
+            "op=compose needs a spec JSON string.",
+            code="invalid_args",
+            fix='Pass spec as a JSON object string, e.g. {"template":"topdown_farming","style":"pixel_32","place":[]}.',
+        )
+    try:
+        spec = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise SceneError(
+            f"spec is not valid JSON: {exc.msg}.",
+            code="invalid_args",
+            fix="Pass one JSON object string in spec, not a path or a nested tool call.",
+        ) from exc
+    if not isinstance(spec, dict):
+        raise SceneError(
+            "spec must decode to a JSON object.",
+            code="invalid_args",
+            fix="Pass a single JSON object with template, style, terrain, and place.",
+        )
+
+    compiled = compile_spec(spec)
+    issues = [issue.as_dict() for issue in compiled["issues"]]
+    if not compiled["ok"]:
+        messages = "; ".join(issue["message"] for issue in issues if issue["severity"] == "error")
+        return err(
+            Code.INVALID_ARGS,
+            f"Compose spec has errors: {messages}",
+            "Fix the spec issues and call op=compose again.",
+            issues=issues,
+        )
+
+    background = compiled["background"]
+    if background.get("type") == "asset":
+        bg_value = background.get("slug")
+    else:
+        bg_value = background.get("color")
+    name = payload.get("name") or payload.get("scene") or (compiled["id"] if compiled["id"] != "scene" else None)
+    scene = create_scene(compiled["width"], compiled["height"], name=name, background=bg_value)
+    scene_id = scene["id"]
+
+    for layer in compiled["layers"]:
+        args = {
+            "scene": scene_id,
+            "slug": layer["slug"],
+            "x": layer["x"],
+            "y": layer["y"],
+            "z": layer["z"],
+            "scale": layer["scale"],
+            "flip_x": layer.get("flip_x", False),
+            "flip_y": layer.get("flip_y", False),
+        }
+        tile = layer.get("tile")
+        if isinstance(tile, dict):
+            args["tile_w"] = tile["w"]
+            args["tile_h"] = tile["h"]
+        place_asset(args)
+
+    rendered = render_scene({"scene": scene_id})
+    rendered["issues"] = issues
+    rendered["hud_drawn"] = False
+    if isinstance(spec.get("hud"), dict) and spec["hud"]:
+        try:
+            from assetrizz_plugin.compose_v2 import hud as hud_module
+        except ImportError:
+            # HUD support is optional: the world is compiled and rendered above.
+            hud_module = None
+        if hud_module is not None:
+            scene_doc = list_layers({"scene": scene_id})["scene"]
+            canvas = compose(scene_doc)
+            docks = compiled["template"].get("hud") or compiled["hud"]
+            canvas = hud_module.draw_hud(
+                canvas,
+                compiled["hud"],
+                style=str(compiled["meta"].get("style") or ""),
+                docks=docks,
+                nearest=bool(compiled["template"].get("nearest")),
+            )
+            canvas.save(rendered["png"], format="PNG", optimize=True)
+            rendered["preview"] = write_preview(canvas, scene_id)
+            rendered["hud_drawn"] = True
+    return _ok(rendered)
 
 
 def _from_exc(exc: BaseException) -> str:

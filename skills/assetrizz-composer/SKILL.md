@@ -58,6 +58,26 @@ arbitrary files.
   preview. Returns a filesystem path, not a full image. Do not embed the PNG.
 - `op=save` / `op=load` — scene JSON in the plugin data dir; `save` can take
   `as` / `name` to copy.
+- `op=compose` — compile a declarative spec and render the result. The `spec`
+  argument is **one JSON string** (not a nested tool call and not a file path).
+  It names a `template` and `style`, then lists `terrain` cells or rects,
+  `place` entries with a `slug` plus `at` / `slot` / `flip_x` / `band`
+  overrides, and an optional `hud` object. The compiler coalesces terrain,
+  assigns bands and y-sorted world z, converts feet positions, applies
+  per-style scale, and returns `issues` for anything it had to nudge or could
+  not place. Valid specs create a normal, editable scene and render the world;
+  when the spec includes `hud`, the HUD is drawn after the world render. Use
+  `issues` to revise the spec instead of editing individual layers.
+
+```json
+{"template":"topdown_farming","style":"pixel_32",
+ "terrain":[{"tile":"tiles/floor/grass_base","rect":[0,0,20,12]}],
+ "place":[{"id":"player","slug":"characters/humanoid/farmer_front","at":[9.5,8]}],
+ "hud":{"title":"CIDERLATCH"}}
+```
+
+Pass that object as the string value of `spec`. Keep using `op=place` /
+`op=tile` with top-left `x`, `y`, `z`, and `scale` for direct layer control.
 
 Sizes are 16–4096 px per side, at most 200 layers, scale 0.05–8.
 
