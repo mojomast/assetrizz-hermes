@@ -9,3 +9,9 @@ build/
 .venv/
 venv/
 .example-scene-data/
+
+# Built catalog (never commit; generated on first run)
+db/assets.db
+db/assets.db-journal
+db/assets.db-wal
+db/assets.db-shm

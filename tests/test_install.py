@@ -74,7 +74,8 @@ def test_download_resume_and_hash(plugin_env, monkeypatch, tmp_path):
         assert again["skipped"] >= 2
         assert again["errors"] == 0
         # Destination is a library root (seeded catalog snapshot + assets).
-        assert (dest / "db" / "assets.db.xz").is_file() or (dest / "db" / "assets.db").is_file()
+        assert (dest / "db" / "assets.jsonl").is_file()
+        assert (dest / "db" / "assets.db").is_file()
     finally:
         set_fetcher(lambda url: (_ for _ in ()).throw(AssertionError("fetch")))
         monkeypatch.setenv("ASSETRIZZ_OFFLINE", "1")

@@ -1,4 +1,57 @@
-# Catalog submission draft — assetrizz v0.1.0
+# Catalog submission — assetrizz v0.1.1
+
+**Status: v0.1.1 is the review fix for [NousResearch/hermes-agent#152771](https://github.com/NousResearch/hermes-agent/pull/152771).**
+teknium1 requested changes on 10 Nov 2026 (9:46 PM America/Toronto) because
+`db/assets.db.xz` was compressed and the catalog scanner could not read
+inside it. This release removes that snapshot and ships a scannable
+`db/assets.jsonl` instead. The plugin builds a lean SQLite + FTS5 catalog
+in the plugin data directory on first run.
+
+- Plugin repo: https://github.com/mojomast/assetrizz-hermes
+- Version: `0.1.1` (tag / release once this lands on main)
+- Library asset pin (unchanged): [mojomast/assetrizz](https://github.com/mojomast/assetrizz) tag `v0.1.0`, commit `05339c228f55ac95ad21b5c947db0c6e36207cd4`
+- Catalog PR to repin: https://github.com/NousResearch/hermes-agent/pull/152771
+- Fork branch: `catalog/assetrizz-hermes-v0.1.0` (same branch; bump `sha` / `version` after the tag exists)
+
+## Why JSONL, not an uncompressed `.db`
+
+The decompressed v0.1.0 SQLite file is **147 MB**. Most of that is generation
+pipeline data this plugin never queries (`specs` ~69 MB, asset prompts,
+`batches`, claims). Even a lean `.db` would still be a binary the scanner
+cannot read as source. The JSONL is **14.98 MiB** of UTF-8, one asset per
+line, and contains only the fields search and compose use (14,773 rows:
+14,641 `ok`, 132 `rejected`). It is pinned by `db/assets.jsonl.sha256` and
+`BUNDLED_CATALOG_SHA256`. First-run build of the lean index takes about
+**0.55 s** and produces an 18 MB SQLite file under the plugin data dir,
+never in the checkout. A leftover decompressed v0.1.0 db without a source
+stamp is rebuilt. Local / on_demand / offline modes still work. A complete
+mojomast/assetrizz checkout that still has `db/assets.db` or
+`db/assets.db.xz` is accepted.
+
+## Checks on this tree (America/Toronto, 11 Nov 2026)
+
+- Pytest: **47 passed** (the previous 40 plus first-run build, pin, rebuild,
+  and “no compressed or SQLite catalog blobs in the repo” tests).
+- Schema cost unchanged: **2 tools, 931 tokens** (`o200k_base`; 918 on
+  `cl100k_base`).
+- `hermes plugins doctor . --ci`: 2 tool(s), 0 hook(s).
+- `hermes plugins validate . --install-deps`: passed; security scan **safe**.
+  Same documented-seam warning as v0.1.0 (`create_ssrf_safe_client`,
+  `get_write_denied_error`).
+- Work tree (excluding `.git`): **16 MB**, of which 15 MB is `db/assets.jsonl`.
+  No `.xz` / `.gz` / `.zip` / `.db` catalog blobs remain in the plugin tree.
+  `docs/banner.jpg` and `docs/example-scene.png` are the existing reviewable
+  docs images.
+- Secret-scan: `detect-secrets` and a credential-pattern pass; no secrets.
+  The only hex-entropy hits were the public catalog SHA-256 pin and
+  already-public commit SHAs in this file.
+- Assets stay pinned to mojomast/assetrizz `v0.1.0` (`05339c2`).
+
+The v0.1.0 notes below are historical.
+
+---
+
+# Historical notes — assetrizz v0.1.0
 
 **Status: ready to open, waiting for Kyle's yes.** The plugin lives in
 `mojomast/assetrizz-hermes`. The v0.1.0 tag and GitHub release exist. The

@@ -96,7 +96,12 @@ def is_library_root(path: Path) -> bool:
     assets = resolved / "assets"
     if not assets.is_dir():
         return False
-    return (resolved / "db" / "assets.db.xz").is_file() or (resolved / "db" / "assets.db").is_file()
+    db = resolved / "db"
+    return (
+        (db / "assets.db").is_file()
+        or (db / "assets.jsonl").is_file()
+        or (db / "assets.db.xz").is_file()
+    )
 
 
 def discover_library(start: Path | None = None) -> Path | None:
@@ -140,7 +145,7 @@ def resolve_library_optional() -> Path | None:
         resolved = require_non_root(path, label=ENV_LIBRARY)
         if not is_library_root(resolved):
             raise ConfigError(
-                f"{ENV_LIBRARY} is {resolved}, but that folder has no assets/ and db/assets.db.xz.",
+                f"{ENV_LIBRARY} is {resolved}, but that folder has no assets/ and no catalog (db/assets.jsonl, db/assets.db, or db/assets.db.xz).",
                 code="library_missing",
                 fix="Point ASSETRIZZ_LIBRARY at an assetrizz clone, download the library from the pane, or set it to none.",
             )
@@ -153,7 +158,7 @@ def resolve_library_optional() -> Path | None:
         resolved = require_non_root(path, label="library_path")
         if not is_library_root(resolved):
             raise ConfigError(
-                f"library_path is {resolved}, but that folder has no assets/ and db/assets.db.xz.",
+                f"library_path is {resolved}, but that folder has no assets/ and no catalog (db/assets.jsonl, db/assets.db, or db/assets.db.xz).",
                 code="library_missing",
                 fix="Set Library path to a complete clone, or leave it empty and use on-demand fetch.",
             )

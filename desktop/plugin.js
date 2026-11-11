@@ -38,7 +38,7 @@ function mountPane(root, state, actions, css) {
       emptyBlock(
         "Catalog not found",
         model.message ||
-          "The bundled catalog is missing. Reinstall the assetrizz plugin, or point Library path at a library checkout that has db/assets.db.xz."
+          "The bundled catalog is missing. Reinstall the assetrizz plugin so db/assets.jsonl is present, or point Library path at a complete library checkout."
       )
     );
     return;

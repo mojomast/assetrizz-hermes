@@ -15,7 +15,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any
 
-from assetrizz_plugin import BUNDLED_DB_SHA256, PLUGIN_ID
+from assetrizz_plugin import BUNDLED_CATALOG_SHA256, PLUGIN_ID
 from assetrizz_plugin.config import (
     ConfigError,
     asset_mode,
@@ -25,8 +25,8 @@ from assetrizz_plugin.config import (
     resolve_library_optional,
 )
 from assetrizz_plugin.errors import FetchError, LibraryError
+from assetrizz_plugin.catalog import build_catalog_from_jsonl, bundled_catalog_source
 from assetrizz_plugin.library import (
-    bundled_catalog_xz,
     cache_root,
     current_db,
     plugin_root,
@@ -336,26 +336,30 @@ def _seed_library_root(dest: Path) -> None:
     (dest / "assets").mkdir(parents=True, exist_ok=True)
     db_dir = dest / "db"
     db_dir.mkdir(parents=True, exist_ok=True)
-    xz = bundled_catalog_xz()
-    target = db_dir / "assets.db.xz"
-    if xz.is_file() and not target.is_file():
-        refuse_denied_write(target, label="local catalog snapshot")
-        data = xz.read_bytes()
+    source = bundled_catalog_source()
+    target = db_dir / "assets.jsonl"
+    if source.is_file() and not target.is_file():
+        refuse_denied_write(target, label="local catalog source")
+        data = source.read_bytes()
         import hashlib
 
         digest = hashlib.sha256(data).hexdigest()
-        if digest != BUNDLED_DB_SHA256:
+        if digest != BUNDLED_CATALOG_SHA256:
             raise LibraryError(
-                "SHA-256 of the bundled catalog snapshot did not match the pin.",
+                "SHA-256 of the bundled catalog source did not match the pin.",
                 code="hash_mismatch",
-                fix="Reinstall the plugin so db/assets.db.xz is the pinned snapshot.",
+                fix="Reinstall the plugin so db/assets.jsonl is the pinned snapshot.",
             )
         tmp = target.with_name(target.name + ".partial")
         tmp.write_bytes(data)
         os.replace(tmp, target)
-    sidecar = db_dir / "assets.db.xz.sha256"
+    sidecar = db_dir / "assets.jsonl.sha256"
     if not sidecar.is_file():
-        sidecar.write_text(f"{BUNDLED_DB_SHA256}  assets.db.xz\n", encoding="utf-8")
+        sidecar.write_text(f"{BUNDLED_CATALOG_SHA256}  assets.jsonl\n", encoding="utf-8")
+    # Build the lean SQLite catalog so the folder is a complete library root.
+    db_path = db_dir / "assets.db"
+    if target.is_file() and not db_path.is_file():
+        build_catalog_from_jsonl(target, db_path, BUNDLED_CATALOG_SHA256)
 
 
 def _one_file(dest: Path, item: dict[str, str]) -> dict[str, Any]:

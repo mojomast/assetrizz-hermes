@@ -28,7 +28,7 @@ def test_manifest_matches_registered_tools_and_skill():
     ctx = FakeCtx()
     load_plugin().register(ctx)
     assert manifest["name"] == PLUGIN_ID == "assetrizz"
-    assert manifest["version"] == __version__ == "0.1.0"
+    assert manifest["version"] == __version__ == "0.1.1"
     assert manifest["requires_hermes"] == ">=0.23.0"
     assert manifest["requires_env"] == []
     assert manifest["provides_hooks"] == []
@@ -50,7 +50,7 @@ def test_manifest_matches_registered_tools_and_skill():
 def test_dashboard_manifest_points_at_plugin_api():
     data = json.loads((PLUGIN / "dashboard" / "manifest.json").read_text())
     assert data["name"] == "assetrizz"
-    assert data["version"] == "0.1.0"
+    assert data["version"] == "0.1.1"
     api = PLUGIN / "dashboard" / data["api"]
     assert api.is_file()
 
