@@ -82,6 +82,16 @@ Typical tool flow:
    The tool result is a **path**, not an embedded image.
 6. `op=save` / `op=load` persist scene JSON in the plugin data dir.
 
+Prefer `assetrizz_scene` `op=compose` when the agent should build a scene
+from a declarative spec in one step. Pass `spec` as **one JSON string**
+naming a `template` (`topdown_farming`, `topdown_shooter`,
+`dungeon_crawler`, or `side_platformer`) and a `style`, plus `terrain`,
+`place`, and optional `hud`. The compiler coalesces terrain, assigns
+bands and y-sorted world z, and returns `issues` (overlap, density,
+HUD/playfield, off-canvas, and so on) so you can revise the spec instead
+of nudging individual layers. You can still use `op=create` / `op=tile` /
+`op=place` for direct layer control.
+
 Every handler returns a JSON string: `{ok: true, ...}` or
 `{ok: false, error, code, fix}`.
 
