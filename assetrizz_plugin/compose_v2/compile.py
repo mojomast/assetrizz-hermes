@@ -666,7 +666,7 @@ def compile_spec(
         if key in template:
             hud_spec[key] = template[key]
 
-    return {
+    result = {
         "id": template.get("id") or spec.get("id") or "scene",
         "width": width,
         "height": height,
@@ -705,3 +705,34 @@ def compile_spec(
         "issues": issues,
         "ok": not any(issue.severity == "error" for issue in issues),
     }
+
+    try:
+        from .lint import lint_compiled
+    except ImportError:
+        linted: list[Issue] = []
+    else:
+        linted = lint_compiled(
+            result,
+            spec=spec,
+            metrics_fn=resolve,
+            skip_codes=(
+                "overlap",
+                "density",
+                "hud_zone",
+                "off_canvas",
+                "style_lock",
+                "layer_cap",
+            ),
+        )
+    if linted:
+        seen = {(issue.code, issue.subject) for issue in result["issues"]}
+        for issue in linted:
+            key = (issue.code, issue.subject)
+            if key in seen:
+                continue
+            seen.add(key)
+            result["issues"].append(issue)
+        result["ok"] = not any(
+            issue.severity == "error" for issue in result["issues"]
+        )
+    return result
