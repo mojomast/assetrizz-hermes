@@ -1,13 +1,15 @@
 name: assetrizz
-version: "0.1.0"
+version: "0.1.1"
 description: >-
   Skill id assetrizz:assetrizz-composer. Search the assetrizz 2D game-asset
   catalog (FTS over slugs, tags, descriptions, styles, and categories) and
   compose scenes from those assets. Tools: assetrizz_search and assetrizz_scene.
-  This repository is the installable plugin (about 5.1 MB including a 4.7 MB
-  SHA-256-pinned catalog). The 14,641 PNGs (about 1.65 GB, 23 style packs)
-  live in https://github.com/mojomast/assetrizz and are not copied into the
-  plugins folder. Search works after install. Asset mode is one of on_demand
+  This repository is the installable plugin (about 16 MB including a 15 MB
+  SHA-256-pinned, scannable JSONL catalog). The plugin builds a lean SQLite
+  + FTS5 index in the plugin data directory on first search. The 14,641 PNGs
+  (about 1.65 GB, 23 style packs) live in https://github.com/mojomast/assetrizz
+  and are not copied into the plugins folder. Search works after install. Asset
+  mode is one of on_demand
   (default: fetch a single PNG from GitHub raw when you place, render, or
   preview it), local (you download the full library or chosen style packs
   once into a directory you pick), or offline (local files only, no network).
@@ -82,8 +84,9 @@ config_schema:
     label: Library path
     description: >-
       Optional path to a complete assetrizz library checkout (assets/ plus
-      db/assets.db.xz). Leave empty to auto-detect a checkout next to this
-      plugin, or set to none to force the bundled catalog.
+      a catalog: db/assets.jsonl, db/assets.db, or db/assets.db.xz). Leave
+      empty to auto-detect a checkout next to this plugin, or set to none
+      to force the bundled catalog.
   export_dir:
     type: str
     default: ""

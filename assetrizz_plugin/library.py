@@ -11,7 +11,8 @@ import threading
 from pathlib import Path
 from typing import Any
 
-from assetrizz_plugin import BUNDLED_DB_SHA256
+from assetrizz_plugin import BUNDLED_CATALOG_SHA256
+from assetrizz_plugin.catalog import build_catalog_from_jsonl, restore_bundled_catalog
 from assetrizz_plugin.config import (
     ConfigError,
     asset_mode,
@@ -124,10 +125,6 @@ def plugin_root() -> Path:
     return Path(__file__).resolve().parent.parent
 
 
-def bundled_catalog_xz() -> Path:
-    return plugin_root() / "db" / "assets.db.xz"
-
-
 def sha256_file(path: Path) -> str:
     import hashlib
 
@@ -163,22 +160,41 @@ def _writable_dir(path: Path) -> bool:
         return False
 
 
-def restore_db(library: Path, dest_fallback: Path) -> Path:
-    """Return a usable assets.db, decompressing db/assets.db.xz if needed.
+def _sidecar_sha256(source: Path) -> str | None:
+    sidecar = source.with_name(source.name + ".sha256")
+    if not sidecar.is_file():
+        return None
+    try:
+        return sidecar.read_text(encoding="utf-8").split()[0].strip().lower()
+    except OSError:
+        return None
 
-    Prefers ``library/db/assets.db`` when that folder is writable; otherwise
-    writes a copy under the plugin data dir. Never overwrites an existing db.
+
+def restore_db(library: Path, dest_fallback: Path) -> Path:
+    """Return a usable assets.db, building or decompressing a catalog if needed.
+
+    Prefers ``library/db/assets.db``. Otherwise builds from ``assets.jsonl``
+    (plugin-seeded libraries) or decompresses ``assets.db.xz`` (a
+    mojomast/assetrizz v0.1.0 checkout). The built or decompressed db is
+    written next to the source when that folder is writable, else to
+    dest_fallback. An existing db is never overwritten.
     """
     library = require_non_root(library, label="library")
     xz = library / "db" / "assets.db.xz"
     local = library / "db" / "assets.db"
+    jsonl = library / "db" / "assets.jsonl"
     if local.is_file():
         return local
+    if jsonl.is_file():
+        dest = local if _writable_dir(local.parent) else dest_fallback
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        expected = _sidecar_sha256(jsonl) or BUNDLED_CATALOG_SHA256
+        return build_catalog_from_jsonl(jsonl, dest, expected)
     if not xz.is_file():
         raise LibraryError(
-            f"No catalog at {local} and no snapshot at {xz}.",
+            f"No catalog at {local}, no JSONL at {jsonl}, and no snapshot at {xz}.",
             code="library_missing",
-            fix="Clone assetrizz with db/assets.db.xz, or run bash db/restore.sh in the checkout.",
+            fix="Reinstall the plugin (db/assets.jsonl) or point Library path at a complete assetrizz checkout.",
         )
     if _writable_dir(local.parent):
         dest = local
@@ -235,11 +251,6 @@ def restore_catalog_xz(xz: Path, dest: Path, expected_sha256: str) -> Path:
             tmp.unlink(missing_ok=True)
         raise
     return dest
-
-
-def restore_bundled_catalog(dest: Path | None = None) -> Path:
-    dest = dest if dest is not None else data_home() / "catalog" / "assets.db"
-    return restore_catalog_xz(bundled_catalog_xz(), dest, BUNDLED_DB_SHA256)
 
 
 def current_library_optional() -> Path | None:

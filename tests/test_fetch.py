@@ -2,11 +2,10 @@ from __future__ import annotations
 
 import hashlib
 import lzma
-from pathlib import Path
 
 import pytest
 
-from assetrizz_plugin import ASSET_HOST, ASSET_REF, BUNDLED_DB_SHA256
+from assetrizz_plugin import ASSET_HOST, ASSET_REF
 from assetrizz_plugin.errors import FetchError, LibraryError
 from assetrizz_plugin.fetch import (
     assert_allowlisted,
@@ -134,7 +133,3 @@ def test_search_still_works_when_png_missing(plugin_env):
     assert found["total"] == 1
 
 
-def test_bundled_pin_constant_matches_sidecar():
-    sidecar = Path(__file__).resolve().parents[1] / "db" / "assets.db.xz.sha256"
-    text = sidecar.read_text(encoding="utf-8").split()[0].strip().lower()
-    assert text == BUNDLED_DB_SHA256
