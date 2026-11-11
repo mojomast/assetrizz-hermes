@@ -17,7 +17,7 @@ This repository is just the plugin (about **16 MB** installed, including a **15 
 - Skill id: `assetrizz:assetrizz-composer` (pass that exact string to `skill_view`)
 - Tools: `assetrizz_search`, `assetrizz_scene`
 - Requires Hermes `>=0.23.0` (the Desktop pane uses `ctx.rest`)
-- Version: `0.1.1`
+- Version: `0.2.0` — compose-v2 (`op=compose`, four gameplay templates, layer lint, canvas HUD). See [CHANGELOG.md](CHANGELOG.md).
 - License: MIT for the plugin code. The assets remain “original, generated for Kyle Durepos” — see the [library license](https://github.com/mojomast/assetrizz/blob/v0.1.0/pipeline/LICENSE.txt).
 
 <p align="center">
@@ -55,6 +55,8 @@ Set **Local library directory** (`local_library_dir` / `ASSETRIZZ_LOCAL_LIBRARY`
 ```bash
 hermes plugins install mojomast/assetrizz-hermes
 ```
+
+To pin a release, pass the 40-character commit SHA of the [v0.2.0 tag](https://github.com/mojomast/assetrizz-hermes/releases/tag/v0.2.0) as `--ref` (`--ref` does not accept a tag name). The open catalog listing still needs a separate, approved SHA pin.
 
 Search works immediately from the bundled catalog. You do not need a 1.65 GB clone for that. Leave **Asset mode** at `on_demand`, or open the Assetrizz pane and click **Download library** to keep a complete local copy.
 
@@ -168,6 +170,6 @@ comparison). Keep the two `op`-style tools; do not split them into many
 fine-grained tools, and do not add a model-callable download tool.
 
 Bump the version in one place with
-`python scripts/bump_plugin_version.py 0.1.1` (also updates `pyproject.toml`
+`python scripts/bump_plugin_version.py 0.2.0` (also updates `pyproject.toml`
 and `assetrizz_plugin/__init__.py`). Tag, release, catalog submit, and deploy
 only with an explicit yes from the owner.

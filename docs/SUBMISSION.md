@@ -1,3 +1,30 @@
+# Catalog submission — assetrizz v0.2.0
+
+**Status: v0.2.0 is tagged on main. A YAML-only catalog branch can be pushed
+on the mojomast/hermes-agent fork, but [NousResearch/hermes-agent#152771](https://github.com/NousResearch/hermes-agent/pull/152771)
+must not be updated until Kyle explicitly says yes.** compose-v2 is a minor
+feature on top of the 0.1.1 scannable-catalog fix.
+
+- Plugin repo: https://github.com/mojomast/assetrizz-hermes
+- Version: `0.2.0`
+- Library asset pin (unchanged): [mojomast/assetrizz](https://github.com/mojomast/assetrizz) tag `v0.1.0`, commit `05339c228f55ac95ad21b5c947db0c6e36207cd4`
+- Catalog PR to repin later: https://github.com/NousResearch/hermes-agent/pull/152771
+- Existing PR head branch (do not push to it): `catalog/assetrizz-hermes-v0.1.0`
+- New fork branch for the v0.2.0 pin: `catalog/assetrizz-hermes-v0.2.0`
+
+## What changed since 0.1.1
+
+- `assetrizz_scene` `op=compose`, four gameplay templates, layer lint, and canvas HUD/playfield guides.
+- Schema tokens: **970** (`o200k_base`; was 931, +39, cap +80).
+- Versions in `plugin.yaml`, `pyproject.toml`, `dashboard/manifest.json`, and the README all read `0.2.0`.
+- CHANGELOG added. Catalog bars from 0.1.1 still hold: scannable JSONL (no compressed catalog blob), Hermes SSRF guard on pinned GitHub raw fetches, `ctx.rest` pane, `requires_hermes: ">=0.23.0"`, no credentials, path confinement, `get_hermes_home()` / `plugin_data_dir` for data paths.
+
+The pin SHA belongs on the `v0.2.0` tag, not on a later docs-only follow-up.
+
+The v0.1.1 notes below are historical.
+
+---
+
 # Catalog submission — assetrizz v0.1.1
 
 **Status: v0.1.1 is the review fix for [NousResearch/hermes-agent#152771](https://github.com/NousResearch/hermes-agent/pull/152771).**

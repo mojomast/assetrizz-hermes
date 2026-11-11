@@ -1,9 +1,12 @@
 name: assetrizz
-version: "0.1.1"
+version: "0.2.0"
 description: >-
   Skill id assetrizz:assetrizz-composer. Search the assetrizz 2D game-asset
   catalog (FTS over slugs, tags, descriptions, styles, and categories) and
   compose scenes from those assets. Tools: assetrizz_search and assetrizz_scene.
+  assetrizz_scene op=compose compiles a compact signed spec into a scene
+  (four gameplay templates, and layer lint for
+  collisions, HUD/playfield overlap, and off-canvas).
   This repository is the installable plugin (about 16 MB including a 15 MB
   SHA-256-pinned, scannable JSONL catalog). The plugin builds a lean SQLite
   + FTS5 index in the plugin data directory on first search. The 14,641 PNGs
